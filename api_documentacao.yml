@@ -1,0 +1,19 @@
+openapi: "3.0.2"
+info:
+  title: API Title
+  version: "1.0"
+servers:
+  - url: https://api.server.test/v1
+paths:
+  /tuitar-temperatura:
+    post:
+      operationId: tuitarTemperatura
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cidade:
+                  type: string
