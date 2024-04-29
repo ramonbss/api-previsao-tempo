@@ -5,10 +5,17 @@ import requests
 class API:
     _SERVER = "http://localhost"
     ENDPOINT_OPENWEATHER_API = f"{_SERVER}:8001/previsao_de_tempo"
+    ENDPOINT_TWITTER_API = f"{_SERVER}:8002/tuitar_temperatura"
 
     def obter_previsoes_de_tempo(self, cidade: str):
         url = f"{self.ENDPOINT_OPENWEATHER_API}?cidade={cidade}"
         resposta = requests.get(url)
+        return self._retornar_resultado_servidor(resposta)
+
+    def postar_tuite(self, texto_tuite: str):
+        payload = {"texto": texto_tuite}
+
+        resposta = requests.post(self.ENDPOINT_TWITTER_API, json=payload)
         return self._retornar_resultado_servidor(resposta)
 
     def _retornar_resultado_servidor(self, resposta_requests):
