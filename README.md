@@ -37,3 +37,7 @@ Para postar uma previsão do tempo no Twitter, envie uma requisição `GET` para
 ```
 curl http://localhost:8000/tuitar_previsoes?cidade="Sao Paulo"
 ```
+
+## Documentação
+Há um diagrama da API na pasta `docs`  
+A estrutura da API pode ser consultada a partir da  url http://localhost:8000/docs
