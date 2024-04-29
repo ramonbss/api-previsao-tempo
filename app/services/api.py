@@ -2,7 +2,7 @@ from datetime import datetime
 import requests
 
 
-class API:
+class API_TUITE_PREVISOES:
     _SERVER = "http://localhost"
     ENDPOINT_OPENWEATHER_API = f"{_SERVER}:8001/previsao_de_tempo"
     ENDPOINT_TWITTER_API = f"{_SERVER}:8002/tuitar_temperatura"
@@ -42,7 +42,7 @@ class API:
         for dia in retorno_api_openweather["daily"][1:6]:
             temp_dia = dia["temp"]["day"]
             data = datetime.fromtimestamp(dia["dt"]).strftime("%d/%m")
-            tuite += f"{temp_dia}°C on {data}, "
+            tuite += f"{temp_dia}°C em {data}, "
 
         tuite = tuite.rstrip(", ")
         return tuite

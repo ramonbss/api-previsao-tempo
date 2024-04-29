@@ -1,11 +1,11 @@
 import pytest
 import requests_mock
-from app.services.api import API
+from app.services.api import API_TUITE_PREVISOES
 
 
 @pytest.fixture
 def api():
-    return API()
+    return API_TUITE_PREVISOES()
 
 
 def test_obter_previsoes_de_tempo_successo(api):
