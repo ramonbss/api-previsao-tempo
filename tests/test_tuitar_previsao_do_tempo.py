@@ -79,3 +79,60 @@ def test_postar_tuite_falha(api):
 
         assert resposta["resultado"] is False
         assert "data" in resposta
+
+
+def test_tuitar_previsao_do_tempo_successo(api):
+    cidade = "Salvador"
+    with requests_mock.Mocker() as mocker:
+        mocker.get(
+            api.ENDPOINT_OPENWEATHER_API,
+            json={
+                "lat": -12.9822,
+                "lon": -38.4813,
+                "timezone": "America/Bahia",
+                "current": {
+                    "dt": 1714354666,
+                    "temp": 27.85,
+                    "clouds": 40,
+                    "weather": [
+                        {"id": 802, "main": "Nuvens", "description": "nuvens dispersas"}
+                    ],
+                },
+                "daily": [
+                    {"dt": 1714312800, "temp": {"day": 28.73}},
+                    {"dt": 1714399201, "temp": {"day": 27.34}},
+                    {"dt": 1714399202, "temp": {"day": 27.37}},
+                    {"dt": 1714399203, "temp": {"day": 27.38}},
+                    {"dt": 1714399204, "temp": {"day": 27.39}},
+                    {"dt": 1714399205, "temp": {"day": 27.40}},
+                ],
+            },
+        )
+
+        mocker.post(
+            api.ENDPOINT_TWITTER_API,
+            json={"resultado": True, "data": "Tuite criado com sucesso!"},
+        )
+
+        resposta_tuitar_previsao = api.tuitar_previsao_do_tempo(cidade)
+
+        assert resposta_tuitar_previsao["status_code"] == 201
+        assert resposta_tuitar_previsao["mensagem"] == "Tuite criado com sucesso!"
+
+
+def test_tuitar_previsao_do_tempo_falha(api):
+    cidade = "CidadeInexistente"
+    with requests_mock.Mocker() as mocker:
+        mocker.get(
+            api.ENDPOINT_OPENWEATHER_API,
+            status_code=400,
+            json={
+                "detail": f"Erro ao obter previsão para a cidade: {cidade}",
+                "status_code": 400,
+            },
+        )
+
+        response = api.tuitar_previsao_do_tempo(cidade)
+
+        assert response["status_code"] == 400
+        assert "mensagem_erro" in response
