@@ -8,6 +8,14 @@ def api():
     return API_TUITE_PREVISOES()
 
 
+def testar_nome_servidor_openweather_preenchido(api):
+    assert api.ENDPOINT_OPENWEATHER_API
+
+
+def testar_nome_servidor_twitter_preenchido(api):
+    assert api.ENDPOINT_TWITTER_API
+
+
 def test_obter_previsoes_de_tempo_successo(api):
     cidade = "Salvador"
     with requests_mock.Mocker() as mocker:

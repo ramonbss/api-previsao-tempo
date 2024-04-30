@@ -3,12 +3,19 @@ import requests
 
 
 class API_TUITE_PREVISOES:
-    _SERVER = "http://localhost"
-    ENDPOINT_OPENWEATHER_API = f"{_SERVER}:8001/previsao_de_tempo"
-    ENDPOINT_TWITTER_API = f"{_SERVER}:8002/tuitar_temperatura"
+    _SERVIDOR_PADRAO = "http://localhost"
+
+    def __init__(
+        self,
+        nome_servidor_openweather=_SERVIDOR_PADRAO,
+        nome_servidor_twitter=_SERVIDOR_PADRAO,
+    ) -> None:
+        self.setar_servidor_openweather(nome_servidor_openweather)
+        self.setar_servidor_twitter(nome_servidor_twitter)
 
     def obter_previsoes_de_tempo(self, cidade: str):
         url = f"{self.ENDPOINT_OPENWEATHER_API}?cidade={cidade}"
+        print(f"url openweather: {url}")
         resposta = requests.get(url)
         return self._retornar_resultado_servidor(resposta)
 
@@ -16,6 +23,7 @@ class API_TUITE_PREVISOES:
         payload = {"texto": texto_tuite}
 
         resposta = requests.post(self.ENDPOINT_TWITTER_API, json=payload)
+        print(f"Url twitter: {self.ENDPOINT_TWITTER_API}")
         return self._retornar_resultado_servidor(resposta)
 
     def tuitar_previsao_do_tempo(self, cidade: str):
@@ -58,3 +66,13 @@ class API_TUITE_PREVISOES:
 
     def _retornar_sucesso(self, mensagem):
         return {"status_code": 201, "mensagem": mensagem}
+
+    @classmethod
+    def setar_servidor_openweather(cls, nome_servidor: str, porta=8001):
+        cls.ENDPOINT_OPENWEATHER_API = (
+            f"http://{nome_servidor}:{porta}/previsao_de_tempo"
+        )
+
+    @classmethod
+    def setar_servidor_twitter(cls, nome_servidor: str, porta=8002):
+        cls.ENDPOINT_TWITTER_API = f"http://{nome_servidor}:{porta}/tuitar_temperatura"

@@ -1,0 +1,34 @@
+
+services:
+  
+  api_integracao:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - target: 8000
+        published: 8000
+    networks:
+      - rede_integracao_apis
+    environment:
+      - SERVIDOR_OPENWEATHER=api_openweather
+      - SERVIDOR_TWITTER=api_twitter
+  
+  api_openweather:
+    image: "caiena_openweather"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001
+    ports:
+      - "8001:8001"
+    networks:
+      rede_integracao_apis:
+
+  api_twitter:
+    image: "caiena_twitter"
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8002
+    ports:
+     -  "8002:8002"
+    networks:
+      rede_integracao_apis:
+  
+
+networks:
+  rede_integracao_apis:
